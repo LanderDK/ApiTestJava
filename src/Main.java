@@ -5,8 +5,7 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	public static void main(String[] args) {
-		API.OnProgramStart.Initialize("BlitzWare", "64aa5135948a28fa6040b0d6900de77e9a3924e6cee6cc3333c32ff5f8707e8e",
-				"1.0");
+		API.OnProgramStart.Initialize("APP NAME", "SECRET", "VERSION");
 
 		System.out.println("\n[1] Login");
 		System.out.println("[2] Register");
