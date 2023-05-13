@@ -26,6 +26,7 @@ public class Main {
 			if (API.login(username, password)) {
 				JOptionPane.showMessageDialog(null, "Successfully Logged In!", API.OnProgramStart.Name,
 						JOptionPane.INFORMATION_MESSAGE);
+				API.log(API.User.username, "User logged in");
 				System.out.println("ID: " + API.User.ID);
 				System.out.println("Username: " + API.User.username);
 				System.out.println("Email: " + API.User.email);
@@ -55,6 +56,7 @@ public class Main {
 			if (API.register(username, password, email, license)) {
 				JOptionPane.showMessageDialog(null, "Successfully Registered!", API.OnProgramStart.Name,
 						JOptionPane.INFORMATION_MESSAGE);
+				API.log(API.User.username, "User registered");
 				scanner.nextLine();
 				scanner.close();
 			} else {
@@ -73,6 +75,7 @@ public class Main {
 				if (API.extendSub(username, password, license)) {
 					JOptionPane.showMessageDialog(null, "Successfully Extended Your Subscription!",
 							API.OnProgramStart.Name, JOptionPane.INFORMATION_MESSAGE);
+					API.log(API.User.username, "User extended");
 					scanner.nextLine();
 					scanner.close();
 				} else {
