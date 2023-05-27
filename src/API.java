@@ -267,6 +267,7 @@ public class API {
 			json.put("password", password);
 			json.put("hwid", Constants.HWID());
 			json.put("lastIP", Constants.IP());
+			json.put("appId", ApplicationSettings.id);
 			String jsonStr = json.toString();
 
 			URL url = new URL(Constants.apiUrl + "users/login");
@@ -468,6 +469,7 @@ public class API {
 			json.put("password", password);
 			json.put("license", license);
 			json.put("hwid", Constants.HWID());
+			json.put("appId", ApplicationSettings.id);
 			String jsonStr = json.toString();
 
 			URL url = new URL(Constants.apiUrl + "users/upgrade");
