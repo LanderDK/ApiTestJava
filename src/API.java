@@ -81,13 +81,13 @@ public class API {
 	static class User {
 		static String ID;
 		static String username;
-		static String password;
 		static String email;
 		static String hwid;
 		static String ip;
 		static String expiry;
 		static String lastLogin;
 		static String registerDate;
+		static String authToken;
 	}
 
 	public class OnProgramStart {
@@ -307,14 +307,16 @@ public class API {
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
-				User.ID = responseJson.getString("id");
-				User.username = responseJson.getString("username");
-				User.password = responseJson.getString("password");
-				User.email = responseJson.getString("email");
-				User.expiry = responseJson.getString("expiryDate");
-				User.lastLogin = responseJson.getString("lastLogin");
-				User.ip = responseJson.getString("lastIP");
-				User.hwid = responseJson.getString("hwid");
+				JSONObject userJson = responseJson.getJSONObject("user");
+
+				User.ID = userJson.getString("id");
+				User.username = userJson.getString("username");
+				User.email = userJson.getString("email");
+				User.expiry = userJson.getString("expiryDate");
+				User.lastLogin = userJson.getString("lastLogin");
+				User.ip = userJson.getString("lastIP");
+				User.hwid = userJson.getString("hwid");
+				User.authToken = responseJson.getString("token");
 				Security.end();
 				return true;
 			} else {
@@ -408,13 +410,16 @@ public class API {
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
-				User.ID = responseJson.getString("id");
-				User.username = responseJson.getString("username");
-				User.email = responseJson.getString("email");
-				User.expiry = responseJson.getString("expiryDate");
-				User.lastLogin = responseJson.getString("lastLogin");
-				User.ip = responseJson.getString("lastIP");
-				User.hwid = responseJson.getString("hwid");
+				JSONObject userJson = responseJson.getJSONObject("user");
+
+				User.ID = userJson.getString("id");
+				User.username = userJson.getString("username");
+				User.email = userJson.getString("email");
+				User.expiry = userJson.getString("expiryDate");
+				User.lastLogin = userJson.getString("lastLogin");
+				User.ip = userJson.getString("lastIP");
+				User.hwid = userJson.getString("hwid");
+				User.authToken = responseJson.getString("token");
 				Security.end();
 				return true;
 			} else {
@@ -509,13 +514,16 @@ public class API {
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
-				User.ID = responseJson.getString("id");
-				User.username = responseJson.getString("username");
-				User.email = responseJson.getString("email");
-				User.expiry = responseJson.getString("expiryDate");
-				User.lastLogin = responseJson.getString("lastLogin");
-				User.ip = responseJson.getString("lastIP");
-				User.hwid = responseJson.getString("hwid");
+				JSONObject userJson = responseJson.getJSONObject("user");
+
+				User.ID = userJson.getString("id");
+				User.username = userJson.getString("username");
+				User.email = userJson.getString("email");
+				User.expiry = userJson.getString("expiryDate");
+				User.lastLogin = userJson.getString("lastLogin");
+				User.ip = userJson.getString("lastIP");
+				User.hwid = userJson.getString("hwid");
+				User.authToken = responseJson.getString("token");
 				Security.end();
 				return true;
 			} else {
@@ -551,7 +559,7 @@ public class API {
 			return false;
 		}
 	}
-	
+
 	public static void log(String username, String action) {
 		if (!Constants.initialized) {
 			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
@@ -595,7 +603,6 @@ public class API {
 			int responseCode = con.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
 				Security.end();
-				System.exit(0);
 			} else {
 				InputStream is = con.getErrorStream();
 				if (is != null) {
@@ -620,10 +627,10 @@ public class API {
 								OnProgramStart.Name, JOptionPane.ERROR_MESSAGE);
 					}
 				}
+				Security.end();
+				System.exit(0);
 			}
 			con.disconnect();
-			Security.end();
-			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);

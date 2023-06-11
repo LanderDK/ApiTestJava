@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	public static void main(String[] args) {
-		API.OnProgramStart.Initialize("APP NAME", "SECRET", "VERSION");
+		API.OnProgramStart.Initialize("APP NAME", "APP SECRET", "APP VERSION");
 
 		System.out.println("\n[1] Login");
 		System.out.println("[2] Register");
@@ -35,7 +35,7 @@ public class Main {
 				System.out.println("IP: " + API.User.ip);
 				scanner.nextLine();
 				scanner.close();
-				//Do code that you want after login
+				//do code you want
 			} else {
 				System.exit(0);
 			}
@@ -58,6 +58,7 @@ public class Main {
 				API.log(API.User.username, "User registered");
 				scanner.nextLine();
 				scanner.close();
+				//do code you want
 			} else {
 				System.exit(0);
 			}
@@ -77,6 +78,7 @@ public class Main {
 					API.log(API.User.username, "User extended");
 					scanner.nextLine();
 					scanner.close();
+					//do code you want
 				} else {
 					System.exit(0);
 				}
