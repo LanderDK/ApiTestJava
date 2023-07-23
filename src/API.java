@@ -14,6 +14,9 @@ import java.awt.Desktop;
 import java.io.*;
 import org.json.JSONObject;
 import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Base64;
 
 public class API {
 
@@ -139,17 +142,17 @@ public class API {
 					br.close();
 					is.close();
 
-			        String receivedHash = con.getHeaderField("X-Response-Hash");
-			        String recalculatedHash = Security.calculateHash(response.toString());
-			        
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
 //			        System.out.println(receivedHash);
 //			        System.out.println(recalculatedHash);
 
-			        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
-						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
-								JOptionPane.WARNING_MESSAGE);
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
 						System.exit(0);
-			        }
+					}
 
 					JSONObject responseJson = new JSONObject(response.toString());
 					Constants.initialized = true;
@@ -237,18 +240,18 @@ public class API {
 						br.close();
 						is.close();
 
-				        String receivedHash = con.getHeaderField("X-Response-Hash");
-				        String recalculatedHash = Security.calculateHash(response.toString());
-				        
+						String receivedHash = con.getHeaderField("X-Response-Hash");
+						String recalculatedHash = Security.calculateHash(response.toString());
+
 //				        System.out.println(receivedHash);
 //				        System.out.println(recalculatedHash);
-				        
-				        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
-							JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
-									JOptionPane.WARNING_MESSAGE);
+
+						if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+							JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+									OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
 							System.exit(0);
-				        }
-						
+						}
+
 						JSONObject responseJson = new JSONObject(response.toString());
 						if (responseJson.getString("code").equals("UNAUTHORIZED")) {
 							JOptionPane.showMessageDialog(null, responseJson.getString("message"), Name,
@@ -277,7 +280,7 @@ public class API {
 		}
 	}
 
-	public static boolean login(String username, String password) {
+	public static boolean login(String username, String password, String twoFactorCode) {
 		if (!Constants.initialized) {
 			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
 					JOptionPane.ERROR_MESSAGE);
@@ -290,6 +293,7 @@ public class API {
 			JSONObject json = new JSONObject();
 			json.put("username", username);
 			json.put("password", password);
+			json.put("twoFactorCode", twoFactorCode);
 			json.put("hwid", Constants.HWID());
 			json.put("lastIP", Constants.IP());
 			json.put("appId", ApplicationSettings.id);
@@ -330,17 +334,17 @@ public class API {
 				br.close();
 				is.close();
 
-		        String receivedHash = con.getHeaderField("X-Response-Hash");
-		        String recalculatedHash = Security.calculateHash(response.toString());
-		        
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
 //		        System.out.println(receivedHash);
 //		        System.out.println(recalculatedHash);
-		        
-		        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
 					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
 							JOptionPane.WARNING_MESSAGE);
 					System.exit(0);
-		        }
+				}
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
@@ -368,17 +372,17 @@ public class API {
 					br.close();
 					is.close();
 
-			        String receivedHash = con.getHeaderField("X-Response-Hash");
-			        String recalculatedHash = Security.calculateHash(response.toString());
-			        
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
 //			        System.out.println(receivedHash);
 //			        System.out.println(recalculatedHash);
-			        
-			        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
-						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
-								JOptionPane.WARNING_MESSAGE);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
 						System.exit(0);
-			        }
+					}
 
 					JSONObject responseJson = new JSONObject(response.toString());
 					if (responseJson.getString("code").equals("UNAUTHORIZED")) {
@@ -457,17 +461,17 @@ public class API {
 				br.close();
 				is.close();
 
-		        String receivedHash = con.getHeaderField("X-Response-Hash");
-		        String recalculatedHash = Security.calculateHash(response.toString());
-		        
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
 //		        System.out.println(receivedHash);
 //		        System.out.println(recalculatedHash);
-		        
-		        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
 					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
 							JOptionPane.WARNING_MESSAGE);
 					System.exit(0);
-		        }
+				}
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
@@ -495,17 +499,17 @@ public class API {
 					br.close();
 					is.close();
 
-			        String receivedHash = con.getHeaderField("X-Response-Hash");
-			        String recalculatedHash = Security.calculateHash(response.toString());
-			        
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
 //			        System.out.println(receivedHash);
 //			        System.out.println(recalculatedHash);
-			        
-			        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
-						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
-								JOptionPane.WARNING_MESSAGE);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
 						System.exit(0);
-			        }
+					}
 
 					JSONObject responseJson = new JSONObject(response.toString());
 					if (responseJson.getString("code").equals("NOT_FOUND")) {
@@ -585,17 +589,17 @@ public class API {
 				br.close();
 				is.close();
 
-		        String receivedHash = con.getHeaderField("X-Response-Hash");
-		        String recalculatedHash = Security.calculateHash(response.toString());
-		        
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
 //		        System.out.println(receivedHash);
 //		        System.out.println(recalculatedHash);
-		        
-		        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
 					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
 							JOptionPane.WARNING_MESSAGE);
 					System.exit(0);
-		        }
+				}
 
 				JSONObject responseJson = new JSONObject(response.toString());
 
@@ -623,17 +627,17 @@ public class API {
 					br.close();
 					is.close();
 
-			        String receivedHash = con.getHeaderField("X-Response-Hash");
-			        String recalculatedHash = Security.calculateHash(response.toString());
-			        
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
 //			        System.out.println(receivedHash);
 //			        System.out.println(recalculatedHash);
-			        
-			        if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
-						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
-								JOptionPane.WARNING_MESSAGE);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
 						System.exit(0);
-			        }
+					}
 
 					JSONObject responseJson = new JSONObject(response.toString());
 					if (responseJson.getString("code").equals("NOT_FOUND")) {
@@ -678,6 +682,7 @@ public class API {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Authorization", "Bearer " + User.authToken);
 			con.setRequestProperty("Content-Length", String.valueOf(jsonStr.length()));
 			con.setDoOutput(true);
 
@@ -728,6 +733,348 @@ public class API {
 				System.exit(0);
 			}
 			con.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public static void createQRCode() {
+		if (!Constants.initialized) {
+			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
+		try {
+			Security.start();
+			Constants.timeSent = LocalDateTime.now();
+
+			JSONObject json = new JSONObject();
+			json.put("userId", User.ID);
+			json.put("appId", ApplicationSettings.id);
+			String jsonStr = json.toString();
+
+			URL url = new URL(Constants.apiUrl + "2fa/user");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Authorization", "Bearer " + User.authToken);
+			con.setRequestProperty("Content-Length", String.valueOf(jsonStr.length()));
+			con.setDoOutput(true);
+
+			OutputStream os = con.getOutputStream();
+			os.write(jsonStr.getBytes());
+			os.flush();
+			os.close();
+
+			if (Security.maliciousCheck(Constants.timeSent)) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+			if (Constants.breached) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+
+			int responseCode = con.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+				InputStream is = con.getInputStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				StringBuilder response = new StringBuilder();
+				String line;
+				while ((line = br.readLine()) != null) {
+					response.append(line);
+				}
+				br.close();
+				is.close();
+
+				// Extract the Base64 encoded image data from the QR code data
+				String encodedImage = response.toString().split(",")[1];
+
+				// Decode the Base64 data
+				byte[] decodedImage = Base64.getDecoder().decode(encodedImage);
+
+				// Load the image
+				ImageIcon imageIcon = new ImageIcon(decodedImage);
+				Image image = imageIcon.getImage();
+
+				// Create and configure a JFrame to display the image
+				JFrame frame = new JFrame("Image Viewer");
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+
+				// Create a JLabel to display the image
+				JLabel imageLabel = new JLabel();
+				imageLabel.setIcon(imageIcon);
+
+				// Add the JLabel to the frame's content pane
+				frame.getContentPane().add(imageLabel);
+
+				// Show the frame
+				frame.setVisible(true);
+			} else {
+				InputStream is = con.getErrorStream();
+				if (is != null) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(is));
+					StringBuilder response = new StringBuilder();
+					String line;
+					while ((line = br.readLine()) != null) {
+						response.append(line);
+					}
+					br.close();
+					is.close();
+
+					JSONObject responseJson = new JSONObject(response.toString());
+					if (responseJson.getString("code").equals("NOT_FOUND")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("UNAUTHORIZED")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("VALIDATION_FAILED")) {
+						JOptionPane.showMessageDialog(null, (responseJson.getJSONObject("details").toString()),
+								OnProgramStart.Name, JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("FORBIDDEN")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				System.exit(0);
+			}
+			con.disconnect();
+			Security.end();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public static void verify2FA(String code) {
+		if (!Constants.initialized) {
+			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
+		try {
+			Security.start();
+			Constants.timeSent = LocalDateTime.now();
+
+			JSONObject json = new JSONObject();
+			json.put("userId", User.ID);
+			json.put("appId", ApplicationSettings.id);
+			json.put("token", code);
+			String jsonStr = json.toString();
+
+			URL url = new URL(Constants.apiUrl + "2fa/user/verify");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Authorization", "Bearer " + User.authToken);
+			con.setRequestProperty("Content-Length", String.valueOf(jsonStr.length()));
+			con.setDoOutput(true);
+
+			OutputStream os = con.getOutputStream();
+			os.write(jsonStr.getBytes());
+			os.flush();
+			os.close();
+
+			if (Security.maliciousCheck(Constants.timeSent)) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+			if (Constants.breached) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+
+			int responseCode = con.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+				InputStream is = con.getInputStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				StringBuilder response = new StringBuilder();
+				String line;
+				while ((line = br.readLine()) != null) {
+					response.append(line);
+				}
+				br.close();
+				is.close();
+
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
+//		        System.out.println(receivedHash);
+//		        System.out.println(recalculatedHash);
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+							JOptionPane.WARNING_MESSAGE);
+					System.exit(0);
+				}
+
+				System.out.println("2FA has been enabled!");
+				API.log(API.User.username, "2FA enabled");
+			} else {
+				InputStream is = con.getErrorStream();
+				if (is != null) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(is));
+					StringBuilder response = new StringBuilder();
+					String line;
+					while ((line = br.readLine()) != null) {
+						response.append(line);
+					}
+					br.close();
+					is.close();
+
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
+//			        System.out.println(receivedHash);
+//			        System.out.println(recalculatedHash);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
+						System.exit(0);
+					}
+
+					JSONObject responseJson = new JSONObject(response.toString());
+					if (responseJson.getString("code").equals("NOT_FOUND")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("UNAUTHORIZED")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("VALIDATION_FAILED")) {
+						JOptionPane.showMessageDialog(null, (responseJson.getJSONObject("details").toString()),
+								OnProgramStart.Name, JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("FORBIDDEN")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				System.exit(0);
+			}
+			con.disconnect();
+			Security.end();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public static void disable2FA(String code) {
+		if (!Constants.initialized) {
+			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
+		try {
+			Security.start();
+			Constants.timeSent = LocalDateTime.now();
+
+			JSONObject json = new JSONObject();
+			json.put("userId", User.ID);
+			json.put("appId", ApplicationSettings.id);
+			json.put("token", code);
+			String jsonStr = json.toString();
+
+			URL url = new URL(Constants.apiUrl + "2fa/user/disable");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Authorization", "Bearer " + User.authToken);
+			con.setRequestProperty("Content-Length", String.valueOf(jsonStr.length()));
+			con.setDoOutput(true);
+
+			OutputStream os = con.getOutputStream();
+			os.write(jsonStr.getBytes());
+			os.flush();
+			os.close();
+
+			if (Security.maliciousCheck(Constants.timeSent)) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+			if (Constants.breached) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+
+			int responseCode = con.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+				InputStream is = con.getInputStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				StringBuilder response = new StringBuilder();
+				String line;
+				while ((line = br.readLine()) != null) {
+					response.append(line);
+				}
+				br.close();
+				is.close();
+
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
+//		        System.out.println(receivedHash);
+//		        System.out.println(recalculatedHash);
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+							JOptionPane.WARNING_MESSAGE);
+					System.exit(0);
+				}
+
+				System.out.println("2FA has been disabled!");
+				API.log(API.User.username, "2FA disabled");
+			} else {
+				InputStream is = con.getErrorStream();
+				if (is != null) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(is));
+					StringBuilder response = new StringBuilder();
+					String line;
+					while ((line = br.readLine()) != null) {
+						response.append(line);
+					}
+					br.close();
+					is.close();
+
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
+//			        System.out.println(receivedHash);
+//			        System.out.println(recalculatedHash);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
+						System.exit(0);
+					}
+
+					JSONObject responseJson = new JSONObject(response.toString());
+					if (responseJson.getString("code").equals("NOT_FOUND")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("UNAUTHORIZED")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("VALIDATION_FAILED")) {
+						JOptionPane.showMessageDialog(null, (responseJson.getJSONObject("details").toString()),
+								OnProgramStart.Name, JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("FORBIDDEN")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				System.exit(0);
+			}
+			con.disconnect();
+			Security.end();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -806,21 +1153,21 @@ public class API {
 				return false;
 			}
 		}
-		
+
 		private static String calculateHash(String data) throws NoSuchAlgorithmException {
-	        MessageDigest md = MessageDigest.getInstance("SHA-256");
-	        byte[] hashBytes = md.digest(data.getBytes());
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hashBytes = md.digest(data.getBytes());
 
-	        StringBuilder hexString = new StringBuilder();
-	        for (byte hashByte : hashBytes) {
-	            String hex = Integer.toHexString(0xff & hashByte);
-	            if (hex.length() == 1) {
-	                hexString.append('0');
-	            }
-	            hexString.append(hex);
-	        }
+			StringBuilder hexString = new StringBuilder();
+			for (byte hashByte : hashBytes) {
+				String hex = Integer.toHexString(0xff & hashByte);
+				if (hex.length() == 1) {
+					hexString.append('0');
+				}
+				hexString.append(hex);
+			}
 
-	        return hexString.toString();
-	    }
+			return hexString.toString();
+		}
 	}
 }

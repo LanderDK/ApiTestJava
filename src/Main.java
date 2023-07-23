@@ -21,8 +21,10 @@ public class Main {
 			String username = scanner.nextLine();
 			System.out.print("\nPassword: ");
 			String password = scanner.nextLine();
+			System.out.print("\n2FA code (if enabled): ");
+            String twoFactorCode = scanner.nextLine();
 
-			if (API.login(username, password)) {
+			if (API.login(username, password, twoFactorCode)) {
 				JOptionPane.showMessageDialog(null, "Successfully Logged In!", API.OnProgramStart.Name,
 						JOptionPane.INFORMATION_MESSAGE);
 				API.log(API.User.username, "User logged in");
@@ -33,9 +35,19 @@ public class Main {
 				System.out.println("HWID: " + API.User.hwid);
 				System.out.println("Last Login: " + API.User.lastLogin);
 				System.out.println("IP: " + API.User.ip);
-				scanner.nextLine();
-				scanner.close();
 				//do code you want
+				System.out.println("\nPress 1 to enable 2FA, press 2 to disable 2FA:");
+				option = scanner.nextLine();
+				if (option.equals("1")) {
+					API.createQRCode();
+					System.out.println("QR Code:");
+					twoFactorCode = scanner.nextLine();
+					API.verify2FA(twoFactorCode);
+				} else if (option.equals("2")) {
+					System.out.println("QR Code:");
+					twoFactorCode = scanner.nextLine();
+					API.disable2FA(twoFactorCode);
+				}
 			} else {
 				System.exit(0);
 			}
