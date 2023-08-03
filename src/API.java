@@ -405,6 +405,130 @@ public class API {
 			return false;
 		}
 	}
+	
+	public static boolean loginLicenseOnly(String license) {
+		if (!Constants.initialized) {
+			JOptionPane.showMessageDialog(null, "Please initialize your application first!", OnProgramStart.Name,
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		try {
+			Security.start();
+			Constants.timeSent = LocalDateTime.now();
+
+			JSONObject json = new JSONObject();
+			json.put("license", license);
+			json.put("hwid", Constants.HWID());
+			json.put("lastIP", Constants.IP());
+			json.put("appId", ApplicationSettings.id);
+			String jsonStr = json.toString();
+
+			URL url = new URL(Constants.apiUrl + "licenses/login");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Content-Length", String.valueOf(jsonStr.length()));
+			con.setDoOutput(true);
+
+			OutputStream os = con.getOutputStream();
+			os.write(jsonStr.getBytes());
+			os.flush();
+			os.close();
+
+			if (Security.maliciousCheck(Constants.timeSent)) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+			if (Constants.breached) {
+				JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
+			}
+
+			int responseCode = con.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+				InputStream is = con.getInputStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
+				StringBuilder response = new StringBuilder();
+				String line;
+				while ((line = br.readLine()) != null) {
+					response.append(line);
+				}
+				br.close();
+				is.close();
+
+				String receivedHash = con.getHeaderField("X-Response-Hash");
+				String recalculatedHash = Security.calculateHash(response.toString());
+
+//		        System.out.println(receivedHash);
+//		        System.out.println(recalculatedHash);
+
+				if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+					JOptionPane.showMessageDialog(null, "Possible malicious activity detected!", OnProgramStart.Name,
+							JOptionPane.WARNING_MESSAGE);
+					System.exit(0);
+				}
+
+				JSONObject responseJson = new JSONObject(response.toString());
+
+				JSONObject userJson = responseJson.getJSONObject("user");
+
+				User.ID = userJson.getString("id");
+				User.username = userJson.getString("username");
+				User.email = userJson.getString("email");
+				User.expiry = userJson.getString("expiryDate");
+				User.lastLogin = userJson.getString("lastLogin");
+				User.ip = userJson.getString("lastIP");
+				User.hwid = userJson.getString("hwid");
+				User.authToken = responseJson.getString("token");
+				Security.end();
+				return true;
+			} else {
+				InputStream is = con.getErrorStream();
+				if (is != null) {
+					BufferedReader br = new BufferedReader(new InputStreamReader(is));
+					StringBuilder response = new StringBuilder();
+					String line;
+					while ((line = br.readLine()) != null) {
+						response.append(line);
+					}
+					br.close();
+					is.close();
+
+					String receivedHash = con.getHeaderField("X-Response-Hash");
+					String recalculatedHash = Security.calculateHash(response.toString());
+
+//			        System.out.println(receivedHash);
+//			        System.out.println(recalculatedHash);
+
+					if (receivedHash == null || !receivedHash.equals(recalculatedHash)) {
+						JOptionPane.showMessageDialog(null, "Possible malicious activity detected!",
+								OnProgramStart.Name, JOptionPane.WARNING_MESSAGE);
+						System.exit(0);
+					}
+
+					JSONObject responseJson = new JSONObject(response.toString());
+					if (responseJson.getString("code").equals("UNAUTHORIZED")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("NOT_FOUND")) {
+						JOptionPane.showMessageDialog(null, responseJson.getString("message"), OnProgramStart.Name,
+								JOptionPane.ERROR_MESSAGE);
+					} else if (responseJson.getString("code").equals("VALIDATION_FAILED")) {
+						JOptionPane.showMessageDialog(null, (responseJson.getJSONObject("details").toString()),
+								OnProgramStart.Name, JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+			con.disconnect();
+			Security.end();
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public static boolean register(String username, String password, String email, String license) {
 		if (!Constants.initialized) {
